@@ -33,18 +33,19 @@ jobs:
       - name: Build Plugins and Manifests
         run: npm run build:full
 
-      - name: Commit and Push to Plugins Branch
+      - name: Commit and Push to Plugins Branch Only
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          
-          # Initialize a separate git workspace inside .dist for the isolated branch push
           cd .dist
           git init
           git checkout -b plugins/v3.0.0
+          
+          # Configure identity inside this isolated build workspace
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
           git add .
           git commit -m "chore: build and publish plugins [skip ci]"
           
-          # Force push the contents of .dist directly to the remote plugins/v3.0.0 branch
+          # Force push strictly to plugins/v3.0.0 (main branch is left completely alone)
           git remote add origin https://github.com/${{ github.repository }}.git
           git push origin plugins/v3.0.0 --force
