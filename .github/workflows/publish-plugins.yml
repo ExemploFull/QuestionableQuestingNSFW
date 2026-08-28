@@ -35,18 +35,17 @@ jobs:
 
       - name: Commit and Push to Plugins Branch with Correct Structure
         run: |
-          # Initialize git in the root project directory (not inside .dist)
-          git init
+          # Switch to the isolated plugins branch
           git checkout -b plugins/v3.0.0
           
           # Configure identity
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           
-          # Force add only the .dist folder so the path structure is preserved
+          # Force add only the .dist folder
           git add -f .dist
           git commit -m "chore: build and publish plugins [skip ci]"
           
-          # Push with authentication token to plugins/v3.0.0
-          git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          # Update remote origin with token and push strictly to plugins/v3.0.0
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           git push origin plugins/v3.0.0 --force
