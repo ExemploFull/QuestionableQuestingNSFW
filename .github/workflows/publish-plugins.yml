@@ -46,6 +46,6 @@ jobs:
           git add .
           git commit -m "chore: build and publish plugins [skip ci]"
           
-          # Force push strictly to plugins/v3.0.0 (main branch is left completely alone)
-          git remote add origin https://github.com/${{ github.repository }}.git
+          # Push with authentication token to plugins/v3.0.0
+          git remote add origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           git push origin plugins/v3.0.0 --force
