@@ -33,17 +33,18 @@ jobs:
       - name: Build Plugins and Manifests
         run: npm run build:full
 
-      - name: Commit and Push to Plugins Branch Only
+      - name: Commit and Push to Plugins Branch with Correct Structure
         run: |
-          cd .dist
+          # Initialize git in the root project directory (not inside .dist)
           git init
           git checkout -b plugins/v3.0.0
           
-          # Configure identity inside this isolated build workspace
+          # Configure identity
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           
-          git add .
+          # Force add only the .dist folder so the path structure is preserved
+          git add -f .dist
           git commit -m "chore: build and publish plugins [skip ci]"
           
           # Push with authentication token to plugins/v3.0.0
